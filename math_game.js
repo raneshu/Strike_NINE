@@ -10,80 +10,76 @@ for(var i = 0; i < keys.length; i++) {
 
       var input = document.querySelector('.screen');
       var rollInput = document.querySelector('.rollScreen')
-      var inputVal = input.innerHTML;
-      var rollInputVal = rollInput.innerHTML;
       var btnVal = this.innerHTML;
- 
-      if(btnVal == 'C') 
-        {
+
+      switch(btnVal){
+      case'C':
         input.innerHTML = '';
-          btnHold.length= 0;
-         }
-       else if(btnVal=='Roll')
-         {
-           if(rollInput.innerHTML =='Correct! Roll Again' || rollInput.innerHTML == '' || rollInput.innerHTML == 'You need to roll first!')
-             {
-               rollInput.innerHTML =  Math.floor(Math.random()*6) +1 + Math.floor(Math.random()*6) +1;
+        btnHold.length= 0;
+        break;
+      case'Roll':
+        if(rollInput.innerHTML=='Correct! Roll Again' || rollInput.innerHTML== '' || rollInput.innerHTML== 'You need to roll first!'){
+               rollInput.innerHTML=  Math.floor(Math.random()*6) +1 + Math.floor(Math.random()*6) +1;
                input.innerHTML = '';
-             }
-         }  
-        else if(btnVal== 'Check')
-          {
-            if(eval(rollInputVal)==eval(inputVal))
-            {
-              rollInput.innerHTML ='Correct! Roll Again';
-              for(var p = 0; p<btnHold.length; p++)
-                {
-                  for(var q = 0; q<keys.length; q++)
-                    {
-                      if (keys[q].innerHTML == btnHold[p])
-                        {
+        }
+        break;  
+
+         //check------------------------------
+      case'Check':            
+            function getSum(arr){
+              var sum =0;
+              for(var i=0;i<arr.length;i++){
+                sum+=parseInt(arr[i]);
+              }
+              return sum
+            }
+            if(rollInput.innerHTML==''){
+              rollInput.innerHTML='You need to roll first!';
+              
+            }
+            else if(eval(rollInput.innerHTML)== getSum(btnHold)){
+              rollInput.innerHTML= 'Correct! Roll Again';
+              for (var i=0;i<btnHold.length;i++){
+                clickedNums.push(btnHold[i]);
+              }
+              for(var p = 0; p<btnHold.length; p++){
+                  for(var q = 0; q<keys.length; q++){
+                      if (btnHold[p] == keys[q].innerHTML){
                           keys[q].innerHTML ='';
                         }
                     }
-
                 }
               
              }
 
-            else if(rollInputVal =='')
-            {
-              rollInput.innerHTML ='You need to roll first!';
-              
-            }
-            
-            btnHold.length= 0;
-
-          }
-      else if(btnVal=='End Game')
-        {
+           btnHold.length= 0;
+          break;
           
+      case 'End Game':
+    
           if(clickedNums.length == possibleNums.length){
-            rollInput.innerHTML = "You Win";
+            rollInput.innerHTML= "You Win";
           }
             
           else rollInput.innerHTML= "Sorry, you lose! Play Again";
           document.querySelector('.end').innerHTML="Play Again";
-        
-        }
-    else if(btnVal =="Play Again"){
-      location.reload();
+        break;
 
-    }
-        
-      else if(btnVal=='+' || inputVal.indexOf(btnVal) < 0){
-         input.innerHTML += btnVal;
-            if(btnVal !='+' && bthHold.length==0)
-            {
-              btnHold.push(btnVal);
-              clickedNums.push(btnVal);
+      case "Play Again":
+        location.reload();
+        break;
+       
+      default:
+       if (input.innerHTML.indexOf(btnVal) < 0){
+            btnHold.push(btnVal);
+            input.innerHTML = btnHold;            
             }
-          }
+        break;
+      }//for switch          
                    
      }
    }
-
-}
+ }
 start();
 
 
